@@ -1,5 +1,6 @@
 import fetch from "node-fetch"
 import { createClient } from "redis"
+import cacheMiddleware from "./cacheMiddleware.js"
 
 class Connection{
     constructor(app) {
@@ -21,23 +22,12 @@ class Connection{
     }
 
     routes(){
-        console.log('routes can be used now')
         this.app.get('/links', 
-        async (req, res, next) => {
-            const value = await this.client.get('username');
-
-            if (value) {
-                res.send(this.setResponse(value))
-            } else {
-                next()
-            }
-        },
+        (req, res,next) => cacheMiddleware(req, res, next, this.client, this.setResponse),
         async (req,res, next) => {
             try{
-                console.log('I am here')
                 const response=await fetch(`https://jsonplaceholder.typicode.com/users`)
                 const data = await response.json()
-                console.log('data is ', data[0].name)
 
                 await this.client.set('username', data[0].name);
 
