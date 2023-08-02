@@ -42,9 +42,6 @@ npm install
 
 3. Set up Redis on your system or use a remote Redis server.
 
-4. Configure the Redis connection in the application:
-   - Open the `config.js` file and set the Redis server details.
-
 ## Usage
 
 Once you have installed the project and configured Redis, you can run the application using the following command:
